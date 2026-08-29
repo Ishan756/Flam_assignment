@@ -158,7 +158,7 @@ After it deploys, copy the backend URL, e.g. `https://study-assistant-backend.on
 Environment variable:
 
 ```
-VITE_API_URL=https://study-assistant-backend.onrender.com   # your backend URL
+VITE_API_URL=https://flam-assignment-r0ld.onrender.com   # your backend URL
 ```
 
 The frontend reads `VITE_API_URL` at build time (see `client/src/api.js`) and calls

@@ -34,7 +34,5 @@ services:
     staticPublishPath: ./dist
     envVars:
       # Point the SPA at your deployed backend.
-      # After the backend service is live, set this to e.g.
-      #   https://study-assistant-backend.onrender.com
       - key: VITE_API_URL
-        sync: false
+        value: https://flam-assignment-r0ld.onrender.com
