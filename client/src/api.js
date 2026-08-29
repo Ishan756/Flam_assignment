@@ -3,8 +3,12 @@
  * The backend streams newline-delimited JSON: {delta}/{final}/{finalError}/{error}.
  * We surface partial text progressively and resolve with the final validated deck.
  */
+const API_URL = import.meta.env.VITE_API_URL
+  ? `${import.meta.env.VITE_API_URL.replace(/\/$/, '')}/api/study`
+  : '/api/study';
+
 export async function streamStudy({ text, existing, onDelta, signal }) {
-  const res = await fetch('/api/study', {
+  const res = await fetch(API_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ text, existing: existing || null }),

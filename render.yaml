@@ -1,0 +1,40 @@
+# Render blueprint — two services:
+#   1. backend  (Express LLM proxy)  -> Web Service
+#   2. frontend (React/Vite SPA)     -> Static Site pointing at the backend URL
+#
+# Deploy with "New + -> Blueprint" and select this repo, OR create the two
+# services manually in the dashboard using the settings below.
+
+services:
+  # ---- Backend: Express API server ----
+  - type: web
+    name: study-assistant-backend
+    runtime: node
+    plan: free
+    rootDir: server
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: AI_BASE_URL
+        value: https://generativelanguage.googleapis.com/v1beta/openai
+      - key: AI_MODEL
+        value: gemini-3.6-flash
+      # Set your real key in the Render dashboard (don't commit it here):
+      - key: AI_API_KEY
+        sync: false
+
+  # ---- Frontend: static React build ----
+  - type: web
+    name: study-assistant-frontend
+    runtime: static
+    rootDir: client
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      # Point the SPA at your deployed backend.
+      # After the backend service is live, set this to e.g.
+      #   https://study-assistant-backend.onrender.com
+      - key: VITE_API_URL
+        sync: false

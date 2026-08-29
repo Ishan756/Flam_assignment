@@ -114,6 +114,61 @@ Open **http://localhost:5173**.
 If you don't set a provider key, the app automatically falls back to **Demo mode**
 (generated sample data) so you can still click around.
 
+## Deploying to Render (two services)
+
+The app is split into two separate Render services:
+
+1. **Backend** (Express API proxy) — a Node **Web Service**.
+2. **Frontend** (React build) — a **Static Site**, pointed at the backend's URL.
+
+Both are defined in **`render.yaml`** (a Blueprint). To deploy, push this repo to GitHub,
+then in Render choose **New → Blueprint** and select the repo. Or create the two services
+manually using the settings below.
+
+> Note the repo ships a local `.npmrc` pinning the public npm registry — leave it in place
+> so Render can install dependencies.
+
+### 1. Backend (Web Service)
+
+| Setting          | Value                          |
+|------------------|--------------------------------|
+| Root Directory   | `server`                       |
+| Build Command    | `npm install`                  |
+| Start Command    | `npm start` (`node index.js`)  |
+
+Environment variables (set in the Render dashboard — **never commit the key**):
+
+```
+AI_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai
+AI_API_KEY=<your gemini key>
+AI_MODEL=gemini-3.6-flash
+PORT=4000   # Render injects its own PORT automatically; don't hardcode this
+```
+
+After it deploys, copy the backend URL, e.g. `https://study-assistant-backend.onrender.com`.
+
+### 2. Frontend (Static Site)
+
+| Setting            | Value                     |
+|--------------------|---------------------------|
+| Root Directory     | `client`                  |
+| Build Command      | `npm install && npm run build` |
+| Publish Directory  | `dist`                    |
+
+Environment variable:
+
+```
+VITE_API_URL=https://study-assistant-backend.onrender.com   # your backend URL
+```
+
+The frontend reads `VITE_API_URL` at build time (see `client/src/api.js`) and calls
+`<VITE_API_URL>/api/study`. If it's unset (local dev), it falls back to same-origin
+`/api/study`, which Vite proxies to `http://localhost:4000`.
+
+> **Deploy order:** backend first, then frontend (frontend needs to know the backend URL).
+> Because `VITE_API_URL` is baked in at build time, redeploy the frontend whenever the
+> backend URL changes.
+
 ## How the AI call works
 
 1. The form sends your text to `POST /api/study` on the backend.
