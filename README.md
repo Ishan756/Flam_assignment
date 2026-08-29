@@ -5,6 +5,8 @@
 > renders them as interactive, flippable cards with a self-testing quiz (including
 > re-testing wrong answers). **Not a chatbot.**
 
+**Live demo:** https://flam-assignment-1-17mf.onrender.com
+
 ## Features
 
 - **Free-form text input** — paste notes or just type a topic.
