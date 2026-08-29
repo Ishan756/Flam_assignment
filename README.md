@@ -61,6 +61,16 @@ npm install
 npm run install:all
 ```
 
+> **Windows users:** if `vite` is "not recognized as an internal or external command"
+> (often after deps were installed from a Linux/WSL shell), do a clean reinstall from
+> **PowerShell** so npm creates the correct Windows `.cmd` launchers:
+>
+> ```powershell
+> Remove-Item -Recurse -Force client/node_modules, server/node_modules, node_modules -ErrorAction SilentlyContinue
+> npm install
+> npm run install:all
+> ```
+
 ### 2. Configure your AI provider
 
 Copy `server/.env.example` to `server/.env` and fill it in.
@@ -82,7 +92,7 @@ AI_MODEL=llama-3.3-70b-versatile
 # Gemini (OpenAI-compatible endpoint)
 AI_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai
 AI_API_KEY=AIza...
-AI_MODEL=gemini-1.5-flash
+AI_MODEL=gemini-3.6-flash
 
 # Local Ollama (no key needed — leave AI_API_KEY blank)
 AI_BASE_URL=http://localhost:11434/v1
